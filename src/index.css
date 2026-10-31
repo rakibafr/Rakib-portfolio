@@ -1,0 +1,374 @@
+@import "tailwindcss";
+
+:root {
+  --bg: #07090d;
+  --cy: #19e3d0;
+  --or: #ff5a1f;
+  --tx: #ededed;
+  --dim: rgba(237, 237, 237, 0.64);
+  --line: rgba(237, 237, 237, 0.12);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  background-color: var(--bg);
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--tx);
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-weight: 300;
+  line-height: 1.65;
+  overflow-x: hidden;
+}
+
+@media (pointer: fine) {
+  body.custom-cursor,
+  body.custom-cursor a,
+  body.custom-cursor button,
+  body.custom-cursor input,
+  body.custom-cursor textarea {
+    cursor: none;
+  }
+}
+
+h1, h2, h3, h4, .disp, .font-display {
+  font-family: 'Oswald', Impact, sans-serif;
+  text-transform: uppercase;
+  line-height: 1;
+  letter-spacing: 0.02em;
+}
+
+:focus-visible {
+  outline: 2px solid var(--cy);
+  outline-offset: 4px;
+}
+
+/* Film Grain Overlay */
+.grain-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  pointer-events: none;
+  opacity: 0.07;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/></filter><rect width='160' height='160' filter='url(%23n)'/></svg>");
+  animation: grainAnim 0.6s steps(4) infinite;
+}
+
+/* CRT Scanlines Overlay */
+.scanlines-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 89;
+  pointer-events: none;
+  opacity: 0.04;
+  background: repeating-linear-gradient(0deg, #fff 0 1px, transparent 1px 3px);
+}
+
+@keyframes grainAnim {
+  0% { transform: translate(0, 0); }
+  25% { transform: translate(-3%, 2%); }
+  50% { transform: translate(2%, -3%); }
+  75% { transform: translate(-2%, -1%); }
+  100% { transform: translate(0, 0); }
+}
+
+/* Custom Cursor */
+.cur-dot {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 120;
+  pointer-events: none;
+  border-radius: 50%;
+  width: 6px;
+  height: 6px;
+  margin: -3px;
+  background-color: var(--cy);
+  box-shadow: 0 0 12px var(--cy);
+}
+
+.cur-ring {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 120;
+  pointer-events: none;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  margin: -18px;
+  border: 1.5px solid var(--or);
+  transition: width 0.25s cubic-bezier(0.2, 0.8, 0.2, 1),
+              height 0.25s cubic-bezier(0.2, 0.8, 0.2, 1),
+              margin 0.25s cubic-bezier(0.2, 0.8, 0.2, 1),
+              background 0.25s ease,
+              border-color 0.25s ease;
+}
+
+.cur-ring.cur-hover {
+  width: 68px;
+  height: 68px;
+  margin: -34px;
+  background: rgba(255, 90, 31, 0.15);
+  border-color: var(--cy);
+  box-shadow: 0 0 20px rgba(25, 227, 208, 0.3);
+}
+
+/* Multi-Stripe Vertical Wipe */
+.wipe-container {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  pointer-events: none;
+  display: flex;
+}
+
+.wipe-stripe {
+  flex: 1;
+  background-color: var(--cy);
+  transform: scaleY(0);
+  transform-origin: bottom;
+}
+
+.wipe-stripe:nth-child(even) {
+  background-color: var(--or);
+}
+
+.wipe-active .wipe-stripe {
+  animation: wipeAnim 0.7s cubic-bezier(0.7, 0, 0.3, 1) both;
+  animation-delay: calc(var(--n, 0) * 45ms);
+}
+
+@keyframes wipeAnim {
+  0% {
+    transform: scaleY(0);
+    transform-origin: bottom;
+  }
+  45% {
+    transform: scaleY(1);
+    transform-origin: bottom;
+  }
+  55% {
+    transform: scaleY(1);
+    transform-origin: top;
+  }
+  100% {
+    transform: scaleY(0);
+    transform-origin: top;
+  }
+}
+
+/* Staggered Reveal Elements */
+.rv {
+  clip-path: inset(0 0 100% 0);
+  transform: translateY(28px);
+  transition: clip-path 0.9s cubic-bezier(0.2, 0.8, 0.2, 1),
+              transform 0.9s cubic-bezier(0.2, 0.8, 0.2, 1),
+              opacity 0.9s cubic-bezier(0.2, 0.8, 0.2, 1);
+  opacity: 0.3;
+}
+
+.rv.in {
+  clip-path: inset(0 0 -20% 0);
+  transform: none;
+  opacity: 1;
+}
+
+/* Glitch Typography Animation */
+.glitch-text {
+  animation: glitchAnim 0.35s steps(2) 1;
+}
+
+@keyframes glitchAnim {
+  0% {
+    text-shadow: none;
+    transform: none;
+  }
+  20% {
+    text-shadow: -5px 0 var(--cy), 5px 0 var(--or);
+    transform: translateX(3px);
+  }
+  40% {
+    text-shadow: 3px 0 var(--cy), -3px 0 var(--or);
+    transform: translateX(-2px);
+  }
+  60% {
+    text-shadow: 4px 0 var(--cy), -4px 0 var(--or);
+    transform: translateX(-3px);
+  }
+  80% {
+    text-shadow: -2px 0 var(--cy), 2px 0 var(--or);
+    transform: translateX(1px);
+  }
+  100% {
+    text-shadow: none;
+    transform: none;
+  }
+}
+
+/* Letter fly-in */
+.ch-in {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(40px) skewX(-8deg);
+  filter: blur(10px);
+  animation: chInAnim 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+  animation-delay: calc(var(--i, 0) * 55ms + 0.3s);
+}
+
+@keyframes chInAnim {
+  60% {
+    text-shadow: -6px 0 var(--cy), 6px 0 var(--or);
+  }
+  100% {
+    opacity: 1;
+    transform: none;
+    filter: none;
+    text-shadow: none;
+  }
+}
+
+/* Scroll Line Animation */
+@keyframes linePulse {
+  0%, 100% {
+    transform: scaleX(1);
+  }
+  50% {
+    transform: scaleX(0.2);
+  }
+}
+
+.animate-line-pulse {
+  animation: linePulse 2s ease-in-out infinite;
+}
+
+/* Conic gradient glowing border for cards */
+.conic-border-glow {
+  position: relative;
+  overflow: hidden;
+  background-color: #0c1117;
+  border: 1px solid var(--line);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.conic-border-glow::before {
+  content: "";
+  position: absolute;
+  inset: -50%;
+  background: conic-gradient(
+    transparent,
+    rgba(25, 227, 208, 0.35),
+    transparent 40%,
+    rgba(255, 90, 31, 0.3),
+    transparent 80%
+  );
+  animation: conicSpin 8s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes conicSpin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.conic-border-glow:hover {
+  border-color: var(--cy);
+  box-shadow: 0 0 0 1px var(--cy), 0 0 35px rgba(25, 227, 208, 0.3);
+}
+
+/* Skill card top bar and hover sheen */
+.skill-card {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: rgba(12, 17, 23, 0.6);
+  backdrop-filter: blur(8px);
+  transition: border-color 0.3s ease, transform 0.3s ease;
+}
+
+.skill-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 2px;
+  width: 100%;
+  background: linear-gradient(90deg, var(--cy), var(--or));
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) 0.15s;
+}
+
+.skill-card.in::before,
+.skill-card:hover::before {
+  transform: scaleX(1);
+}
+
+.skill-card::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -60%;
+  width: 40%;
+  height: 100%;
+  background: linear-gradient(100deg, transparent, rgba(25, 227, 208, 0.18), transparent);
+  transform: skewX(-20deg);
+  transition: left 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+  pointer-events: none;
+}
+
+.skill-card:hover {
+  border-color: var(--cy);
+  transform: translateY(-2px);
+}
+
+.skill-card:hover::after {
+  left: 130%;
+}
+
+/* Masonry layout */
+.masonry-grid {
+  columns: 3 280px;
+  column-gap: 20px;
+}
+
+@media (max-width: 640px) {
+  .masonry-grid {
+    columns: 1 100%;
+  }
+}
+
+.masonry-item {
+  break-inside: avoid;
+  margin-bottom: 20px;
+}
+
+/* Reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+  .ch-in {
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+  }
+  .rv {
+    clip-path: none !important;
+    transform: none !important;
+    opacity: 1 !important;
+  }
+}

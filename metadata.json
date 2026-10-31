@@ -1,0 +1,6 @@
+{
+  "name": "Cinematic VFX & Motion Portfolio",
+  "description": "Interactive cinematic portfolio for filmmaker, motion designer, editor, and visual effects artist featuring 3D wireframe canvas, VFX breakdown slider, and video reels.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
